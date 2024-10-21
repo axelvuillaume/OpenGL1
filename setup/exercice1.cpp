@@ -28,8 +28,8 @@ void exercice1Display()
 
 void motionfunc(int x, int y)
 {
-	listVertex[current_vertice][0] = (float)(x - SCREEN_WIDTH / 2) / (SCREEN_WIDTH / 2);
-	listVertex[current_vertice][1] = -(float)(y - SCREEN_HEIGHT / 2) / (SCREEN_HEIGHT / 2);
+	listVertex[current_vertice][0] = (float)(x - 600 / 2) / (600 / 2);
+	listVertex[current_vertice][1] = -(float)(y - 600 / 2) / (600 / 2);
 	glutPostRedisplay();
 }
 

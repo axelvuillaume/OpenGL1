@@ -8,14 +8,16 @@
 #define TITLE "Hello OpenGL!"
 #include <chrono>
 #include <string>
-//#include "exercice1.h"
 #include "exercice2.h"
 #include "exercice1.h"
 #include "constants.cpp"
 
+int SCREEN_WIDTH = 600;
+int SCREEN_HEIGHT = 600;
 bool projection = false;
 
 void updateProjection() {
+	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);  // Met à jour le viewport avec les dimensions actuelles
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity(); // Réinitialise la matrice de projection
 
@@ -31,6 +33,7 @@ void updateProjection() {
 	glMatrixMode(GL_MODELVIEW); // Revenir à la matrice de modèle/vue
 	glLoadIdentity(); // Réinitialise la matrice de modèle/vue
 }
+
 
 void select_exercice(int exercice) {
 	switch (exercice) {
@@ -63,15 +66,27 @@ void keyfunc(unsigned char key, int x, int y) {
 	case 'q':
 		glutLeaveMainLoop();  // Quitter
 		break;
+	case 'x':
+		updateBlending();
+		break;
+
+	case 'w':
+		toggleWireframeMode();
+		break;
+	case 'f': 
+		fogEnabledMode();  // Basculer l'état du brouillard
 	default:
 		std::cout << "Touche non valide" << std::endl;
 		break;
+
 	}
 }
 
 
+
+
 void init() {
-	glClearColor(0.0, 0.0, 0.0, 1.0); // Couleur de fond
+	glClearColor(.5, 0.0, 0.0, 1.0); // Couleur de fond
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -94,10 +109,12 @@ void init() {
 
 
 void reshape(int width, int height) {
-	if (height == 0) height = 1;
+	if (height == 0) height = 1;  // Pour éviter une division par zéro
 
-	glViewport(0, 0, width, height);
+	SCREEN_WIDTH = width;
+	SCREEN_HEIGHT = height;
 
+	glViewport(0, 0, width, height);  // Met à jour le viewport
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -108,9 +125,8 @@ void reshape(int width, int height) {
 		gluPerspective(70.0, aspect, 0.1, 100.0);
 	}
 	else {
-		glOrtho(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0, -2.0, 2.0); 
+		glOrtho(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0, -2.0, 2.0);
 	}
-	std::cout << projection << std::endl;
 
 	glMatrixMode(GL_MODELVIEW);
 }
@@ -131,7 +147,7 @@ void main(int argc, char** argv)
 
 	init();
 	glutKeyboardFunc(keyfunc);
-	//glutReshapeFunc(reshape);
+	glutReshapeFunc(reshape);
 	updateProjection();
 	select_exercice(1);
 	glutMainLoop();
